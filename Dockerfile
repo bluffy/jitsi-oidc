@@ -15,6 +15,6 @@ WORKDIR /app
 COPY --from=builder /src/jitsi-openid .
 COPY LICENSE .
 
-EXPOSE 4080
+EXPOSE 3000
 
 ENTRYPOINT ["jitsi-openid"]

@@ -138,6 +138,6 @@ func main() {
 		w.Write(data)
 	})
 
-	log.Printf("listening on http://%s/", "127.0.0.1:4080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Printf("listening on http://%s/", "127.0.0.1:3000")
+	log.Fatal(http.ListenAndServe(":3000", nil))
 }
