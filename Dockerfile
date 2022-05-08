@@ -6,15 +6,15 @@ WORKDIR /src
 
 COPY . .
 
-RUN go build -ldflags "-w -s" -o jitsi-openid
+RUN go build -ldflags "-w -s" -o jitsi-oidc
 
 FROM alpine
 
 WORKDIR /app
 
-COPY --from=builder /src/jitsi-openid .
+COPY --from=builder /src/jitsi-oidc .
 COPY LICENSE .
 
-EXPOSE 3000
+EXPOSE 3001
 
-ENTRYPOINT ["jitsi-openid"]
+ENTRYPOINT ["jitsi-oidc"]

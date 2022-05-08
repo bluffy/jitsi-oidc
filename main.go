@@ -31,9 +31,13 @@ var (
 )
 
 type PlayLoad struct {
-	ID    string `json:"sub"`
-	Email string `json:"email"`
-	Name  string `json:"name"`
+	Sub   string `json:"sub,omitempty"`
+	ID    string `json:"id,omitempty"`
+	Email string `json:"email,omitempty"`
+	Name  string `json:"name,omitempty"`
+}
+type UserContext struct {
+	User PlayLoad `json:"user"`
 }
 
 func init() {
@@ -178,11 +182,19 @@ func main() {
 		*/
 
 		var playLoad PlayLoad
+
 		err = json.Unmarshal(*resp.IDTokenClaims, &playLoad)
 		if err != nil {
 			c.String(http.StatusInternalServerError, err.Error())
 			return
 		}
+
+		user := &UserContext{
+			User: playLoad,
+		}
+
+		user.User.ID = user.User.Sub
+		user.User.Sub = ""
 
 		claims := jwt.MapClaims{}
 		claims["exp"] = time.Now().Add(time.Hour * 24 * 30).Unix()
@@ -190,13 +202,7 @@ func main() {
 		claims["sub"] = JITSI_SUB
 		claims["iss"] = "jitsi"
 		claims["room"] = room
-		claims["context"] = `{
-			"user": {
-				"name": ` + playLoad.Name + `,
-				"email": ` + playLoad.Email + `,
-				"id": ` + playLoad.ID + `
-			}
-		}`
+		claims["context"] = user
 
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
@@ -207,40 +213,8 @@ func main() {
 
 		c.Redirect(http.StatusFound, JITSI_URL+"/room/"+room+"?jwt="+tokenString)
 
-		/*
-
-			data, err := json.MarshalIndent(resp, "", "    ")
-			if err != nil {
-				c.String(http.StatusInternalServerError, err.Error())
-				return
-			}
-		*/
-
-		/*
-
-
-			token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-			jwt := model.Token{}
-
-			jwt.AccessToken, err = token.SignedString([]byte(os.Getenv("TOKEN_SECRET_KEY")))
-			if err != nil {
-				return jwt, err
-			}
-
-			c.Redirect(http.StatusFound, JITSI_URL+"/room/"+room)
-
-			//c.String(http.StatusOK, "OK")
-		*/
-		//c.JSON(http.StatusOK, resp)
 	})
 
 	r.Run(":3001") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
-	/*
-		http.HandleFunc("/", handleStart)
 
-		http.HandleFunc("/callback", handleCallback)
-
-		log.Printf("listening on http://%s/", "0.0.0.0:3001")
-		log.Fatal(http.ListenAndServe(":3001", nil))
-	*/
 }
