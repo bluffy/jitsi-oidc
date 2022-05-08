@@ -31,8 +31,7 @@ var (
 )
 
 type PlayLoad struct {
-	Sub   string `json:"sub,omitempty"`
-	ID    string `json:"id,omitempty"`
+	ID    string `json:"sub,omitempty"`
 	Email string `json:"email,omitempty"`
 	Name  string `json:"name,omitempty"`
 }
@@ -193,12 +192,12 @@ func main() {
 			User: playLoad,
 		}
 
-		user.User.ID = user.User.Sub
-		user.User.Sub = ""
+		user.User.ID = ""
 
 		claims := jwt.MapClaims{}
 		claims["exp"] = time.Now().Add(time.Hour * 24 * 30).Unix()
 		claims["aud"] = "jitsi"
+		claims["moderator"] = true
 		claims["sub"] = JITSI_SUB
 		claims["iss"] = "jitsi"
 		claims["room"] = room
@@ -211,7 +210,7 @@ func main() {
 			c.String(http.StatusInternalServerError, err.Error())
 		}
 
-		c.Redirect(http.StatusFound, JITSI_URL+"/room/"+room+"?jwt="+tokenString)
+		c.Redirect(http.StatusFound, JITSI_URL+"/"+room+"?jwt="+tokenString)
 
 	})
 
