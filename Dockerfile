@@ -17,4 +17,4 @@ COPY LICENSE .
 
 EXPOSE 3001
 
-ENTRYPOINT ["jitsi-oidc"]
+ENTRYPOINT ["/app/jitsi-oidc"]

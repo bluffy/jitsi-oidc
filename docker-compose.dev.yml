@@ -1,0 +1,17 @@
+
+services:
+  jitsi-openid:
+      build:
+            context: .
+      restart: always
+      environment:       
+        JWT_APP_SECRET:
+        JITSI_SECRET: 
+        JITSI_URL: 
+        JITSI_SUB:
+        ISSUER_BASE_URL: 
+        BASE_URL:
+        CLIENT_ID:
+        SECRET: 
+      ports:
+        - '3000:3001'    
