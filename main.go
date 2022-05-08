@@ -197,7 +197,7 @@ func main() {
 		claims := jwt.MapClaims{}
 		claims["exp"] = time.Now().Add(time.Hour * 24 * 30).Unix()
 		claims["aud"] = "jitsi"
-		claims["moderator"] = true
+		//claims["moderator"] = true
 		claims["sub"] = JITSI_SUB
 		claims["iss"] = "jitsi"
 		claims["room"] = room
