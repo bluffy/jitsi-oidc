@@ -11,6 +11,7 @@ dockerhub: https://hub.docker.com/r/bluffy2006/jitsi-oidc
 github: https://github.com/bluffy/jitsi-oidc.git
 
 # docker-compose.yaml
+```yml
 version: '3.8'
 services:
     jitsi-openid:
@@ -34,5 +35,6 @@ services:
            - "traefik.http.routers.jitsi-auth.entrypoints=websecure"
            - "traefik.http.routers.jitsi-auth.tls.certresolver=le"   
            - "treafik.http.services.jitsi-auth.loadbalancer.server.port=3001"
+```
 
 
